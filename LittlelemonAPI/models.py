@@ -1,17 +1,23 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models import CharField, IntegerField, DecimalField, SlugField, BooleanField, ForeignKey, SmallIntegerField, DateField
+from django.db.models import CharField, DecimalField, SlugField, BooleanField, ForeignKey, SmallIntegerField, DateField
 
 
 class Category(models.Model):
     slug = SlugField()
     title = CharField(max_length=255, db_index=True)
 
+    def __str__(self) -> str:
+        return f"{self.title}"
+
 class MenuItem(models.Model):
     title = CharField(max_length=255, db_index=True)
     price = DecimalField(max_digits=6, decimal_places=2, db_index=True)
     featured = BooleanField(db_index=True)
-    category = ForeignKey(Category, on_delete=models.PROTECT)
+    category = ForeignKey(Category, on_delete=models.PROTECT, default=1)
+
+    def __str__(self) -> str:
+        return f"{self.title}"
 
 class Cart(models.Model):
     user = ForeignKey(User, on_delete=models.CASCADE)
